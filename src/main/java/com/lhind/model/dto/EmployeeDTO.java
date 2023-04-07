@@ -2,8 +2,6 @@ package com.lhind.model.dto;
 
 import com.lhind.model.enums.EmploymentStatus;
 
-import java.util.Date;
-
 public class EmployeeDTO {
 
     private Long id;
@@ -11,8 +9,8 @@ public class EmployeeDTO {
     private String firstName;
     private String middleName;
     private String lastName;
-    private Date employmentDate;
     private EmploymentStatus employmentStatus;
+    private EmployeeDetailsDTO employeeDetailsDTO;
 
     public Long getId() {
         return id;
@@ -54,20 +52,20 @@ public class EmployeeDTO {
         this.lastName = lastName;
     }
 
-    public Date getEmploymentDate() {
-        return employmentDate;
-    }
-
-    public void setEmploymentDate(Date employmentDate) {
-        this.employmentDate = employmentDate;
-    }
-
     public EmploymentStatus getEmploymentStatus() {
         return employmentStatus;
     }
 
     public void setEmploymentStatus(EmploymentStatus employmentStatus) {
         this.employmentStatus = employmentStatus;
+    }
+
+    public EmployeeDetailsDTO getEmployeeDetailsDTO() {
+        return employeeDetailsDTO;
+    }
+
+    public void setEmployeeDetailsDTO(EmployeeDetailsDTO employeeDetailsDTO) {
+        this.employeeDetailsDTO = employeeDetailsDTO;
     }
 
     @Override
@@ -78,8 +76,8 @@ public class EmployeeDTO {
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", employmentDate=" + employmentDate +
                 ", employmentStatus=" + employmentStatus +
+                ", employeeDetailsDTO=" + employeeDetailsDTO +
                 '}';
     }
 

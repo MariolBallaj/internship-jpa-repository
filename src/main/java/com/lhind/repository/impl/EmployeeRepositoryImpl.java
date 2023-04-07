@@ -29,16 +29,20 @@ public class EmployeeRepositoryImpl implements EmployeeRepository {
         return result.getResultList();
     }
 
+    public List<Employee> findAllNamedQuery() {
+        TypedQuery<Employee> result = entityManager.createNamedQuery("findByFirstname", Employee.class);
+        result.setParameter("uname", "Albania");
+        return result.getResultList();
+    }
+
     @Override
     public void save(Employee employee) {
         entityManager.getTransaction().begin();
         if (employee.getId() != null) {
             findById(employee.getId()).ifPresent(existingEmployee -> {
-                employee.setUsername(employee.getUsername());
                 employee.setFirstName(employee.getFirstName());
                 employee.setMiddleName(employee.getMiddleName());
                 employee.setLastName(employee.getLastName());
-                employee.setEmploymentDate(employee.getEmploymentDate());
                 employee.setEmploymentStatus(employee.getEmploymentStatus());
             });
         } else {

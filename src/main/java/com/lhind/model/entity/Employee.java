@@ -2,19 +2,14 @@ package com.lhind.model.entity;
 
 import com.lhind.model.enums.EmploymentStatus;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import java.util.Date;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
+@NamedQueries({
+        @NamedQuery(name = "allEmployees", query = "SELECT e from Employee e"),
+        @NamedQuery(name = "findByFirstname", query = "SELECT e FROM Employee e WHERE e.firstName = :uname")
+})
 @Table(name = "employee")
 public class Employee {
 
@@ -22,20 +17,31 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false, unique = true)
     private Long id;
-    @Column(name = "username", nullable = false, unique = true, length = 60)
-    private String username;
+
     @Column(name = "first_name", nullable = false)
     private String firstName;
     @Column(name = "middle_name")
     private String middleName;
     @Column(name = "last_name", nullable = false)
     private String lastName;
-    @Column(name = "employment_date", nullable = false)
-    @Temporal(value = TemporalType.DATE)
-    private Date employmentDate;
+
     @Column(name = "employment_status", nullable = false)
     @Enumerated(value = EnumType.STRING)
     private EmploymentStatus employmentStatus;
+
+    @OneToOne(mappedBy = "employee")
+    private EmployeeDetails employeeDetails;
+
+    @OneToMany(mappedBy = "employee", fetch = FetchType.EAGER)
+    private List<Booking> bookings; //Set
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_role",
+            joinColumns = @JoinColumn(name = "employee_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id")
+    )
+    private List<Role> roles; //Set
 
     public Long getId() {
         return id;
@@ -43,14 +49,6 @@ public class Employee {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getFirstName() {
@@ -77,14 +75,6 @@ public class Employee {
         this.lastName = lastName;
     }
 
-    public Date getEmploymentDate() {
-        return employmentDate;
-    }
-
-    public void setEmploymentDate(Date employmentDate) {
-        this.employmentDate = employmentDate;
-    }
-
     public EmploymentStatus getEmploymentStatus() {
         return employmentStatus;
     }
@@ -93,16 +83,41 @@ public class Employee {
         this.employmentStatus = employmentStatus;
     }
 
+    public EmployeeDetails getEmployeeDetails() {
+        return employeeDetails;
+    }
+
+    public void setEmployeeDetails(EmployeeDetails employeeDetails) {
+        this.employeeDetails = employeeDetails;
+    }
+
+    public List<Booking> getBookings() {
+        return bookings;
+    }
+
+    public void setBookings(List<Booking> bookings) {
+        this.bookings = bookings;
+    }
+
+    public List<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(List<Role> roles) {
+        this.roles = roles;
+    }
+
     @Override
     public String toString() {
         return "Employee{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", middleName='" + middleName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", employmentDate=" + employmentDate +
                 ", employmentStatus=" + employmentStatus +
+                ", employeeDetails=" + employeeDetails +
+                ", bookings=" + bookings +
+                ", roles=" + roles +
                 '}';
     }
 
